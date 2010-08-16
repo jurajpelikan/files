@@ -1,0 +1,6 @@
+source $HOME/.screenrc.base
+shell -$SHELL
+
+caption always '%{= kW}%-Lw%{= kG}%50> %n%f* %t%{= kW}%+Lw%< %{= kG}%-=%D %d %M %Y  %c:%s%{-}'
+shelltitle "shell"
+

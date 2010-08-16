@@ -1,0 +1,20 @@
+urxvt.font: xft:Bitstream Vera Sans Mono-8
+urxvt.saveLines: 5000
+urxvt.foreground: white
+urxvt.title: Terminal
+urxvt.scrollBar: true
+urxvt.scrollBar_right: true
+urxvt.scrollBar_floating: true
+urxvt.cursorBlink: true
+urxvt.jumpScroll: true
+urxvt.skipScroll: true
+urxvt.depth: 32
+urxvt.background: rgba:0000/0000/0000/dddd
+urxvt.color12: SteelBlue1
+urxvt.color4: DodgerBlue1
+
+! keyboard
+URxvt.keysym.Control-Up:	\033[1;5A
+URxvt.keysym.Control-Down:	\033[1;5B
+URxvt.keysym.Control-Left:	\033[1;5D
+URxvt.keysym.Control-Right:	\033[1;5C

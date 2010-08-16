@@ -1,0 +1,1 @@
+alias grep="grep -R --exclude-dir=.svn --exclude-dir=.git"

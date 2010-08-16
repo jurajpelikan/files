@@ -1,0 +1,12 @@
+#!/bin/bash
+
+if disper -p | grep displays | grep ','
+then
+	gconftool-2 --set "/apps/panel/toplevels/top_panel_screen0/monitor"  --type integer "0"
+	gconftool-2 --set "/apps/panel/toplevels/panel_0/monitor"  --type integer "0"
+	disper -s
+else
+	disper -e
+	gconftool-2 --set "/apps/panel/toplevels/top_panel_screen0/monitor"  --type integer "1"
+	gconftool-2 --set "/apps/panel/toplevels/panel_0/monitor"  --type integer "1"
+fi

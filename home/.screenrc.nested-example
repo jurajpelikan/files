@@ -1,0 +1,21 @@
+source $HOME/.screenrc.base
+sessionname 'master'
+
+hardstatus string "screen :: master | %c     %-w%F[:::%n %t:::]%+w "
+escape ^Vv
+
+# STARTUP SCREENS
+# ------------------------------------------------------------------------------
+screen -t scripts 1 dvtm-screen-virtualenv ~/scripts/
+screen -t django-project 1 dvtm-screen-virtualenv ~/django-project/
+
+# Window numbering starts at 1, not 0.
+bind c screen 1
+bind 0 select 10
+
+# Bind F11 and F12 (NOT F1 and F2) to previous and next screen window
+
+bindkey -k F1 prev
+bindkey -k F2 next
+
+

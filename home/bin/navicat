@@ -1,0 +1,111 @@
+#!/bin/bash
+# This is a script modified from Picasa wrapper script to launch Navicat.exe
+
+cd `dirname "$0"`
+navicat_root=`pwd`
+navicat_root='/home/juraj/src/navicat8_mysql_en/'
+
+# Wine environment required
+export PATH="$navicat_root/wine/bin":"$navicat_root":$PATH
+export LD_LIBRARY_PATH="$navicat_root/wine/lib":"$navicat_root/lib":$LD_LIBRARY_PATH
+export WINEDLLPATH="$navicat_root/wine/lib/wine"
+export WINELOADER="$navicat_root/wine/bin/wine"
+export WINESERVER="$navicat_root/wine/bin/wineserver"
+export WINEPREFIX=$HOME/.navicat
+export WINEDLLOVERRIDES="msxml3=n" # use native msxml3
+# find the x window server location at [current machine]:[displaynumber=0]:[screennumber=0] to run x window application
+# used in crontab schedule part of navicat
+export DISPLAY=":0.0"
+
+# create directories
+[ -d "$WINEPREFIX" ] || mkdir -p "$WINEPREFIX"
+[ -d "$WINEPREFIX/drive_c" ] || mkdir -p "$WINEPREFIX/drive_c"
+[ -d "$WINEPREFIX/drive_c/Program Files" ] || mkdir -p "$WINEPREFIX/drive_c/Program Files"
+[ -d "$WINEPREFIX/drive_c/windows" ] || mkdir -p "$WINEPREFIX/drive_c/windows"
+[ -d "$WINEPREFIX/drive_c/windows/temp" ] || mkdir -p "$WINEPREFIX/drive_c/windows/temp"
+[ -d "$WINEPREFIX/drive_c/windows/inf.done" ] || mkdir -p "$WINEPREFIX/drive_c/windows/inf.done"
+[ -d "$WINEPREFIX/dosdevices" ] || mkdir -p "$WINEPREFIX/dosdevices"
+
+# check integrity of system directories
+for system_dir in \
+	   drive_c/windows/fonts \
+	   drive_c/windows/inf \
+	   drive_c/windows/system \
+	   drive_c/windows/system32  \
+  ; do 
+  if [ -h "$WINEPREFIX/$system_dir" ] ; then
+    if [ `stat --dereference --format %i "$WINEPREFIX/$system_dir"` = `stat --dereference --format %i "$navicat_root/wine/$system_dir"` ] ; then
+    	continue;
+    fi
+    [ -d "$WINEPREFIX/$system_dir" ] || rm -f "$WINEPREFIX/$system_dir"
+  fi
+
+  [ -d "$WINEPREFIX/$system_dir" ] || ln -s "$navicat_root/wine/$system_dir" "$WINEPREFIX/$system_dir"
+
+done
+
+# create Navicat directories
+[ -h "$WINEPREFIX/Navicat" ] && rm -f "$WINEPREFIX/Navicat"  
+[ -d "$WINEPREFIX/Navicat" ] || mkdir -p "$WINEPREFIX/Navicat"  
+(cd "$navicat_root/Navicat";
+    for x in * ; do 
+      oldlink="`pwd`/$x"
+      newlink="$WINEPREFIX/Navicat/$x"
+      if [ -h "$newlink" ] ; then
+	    if [ `stat --dereference --format %i "$oldlink"` = `stat --dereference --format %i "$newlink"` ] ; then
+		continue;
+	    fi
+        [ -d "$newlink" ] || rm -f "$newlink"
+      fi
+
+      [ -d "$newlink" ] || ln -s "$oldlink" "$newlink"
+
+    done 
+)
+
+# create wine emulated devices
+if [ -h "$WINEPREFIX/dosdevices/c:" ] ; then
+  [ -d "$WINEPREFIX/dosdevices/c:" ] || rm -f "$WINEPREFIX/dosdevices/c:"
+fi
+[ -d "$WINEPREFIX/dosdevices/c:" ] || ln -s "$WINEPREFIX/drive_c/" "$WINEPREFIX/dosdevices/c:"
+
+if [ -h "$WINEPREFIX/dosdevices/z:" ] ; then
+  [ -d "$WINEPREFIX/dosdevices/z:" ] || rm -f "$WINEPREFIX/dosdevices/z:"
+fi
+[ -d "$WINEPREFIX/dosdevices/z:" ] || ln -s / "$WINEPREFIX/dosdevices/z:"
+
+if [ -h "$WINEPREFIX/dosdevices/y:" ] ; then
+  [ -d "$WINEPREFIX/dosdevices/y:" ] || rm -f "$WINEPREFIX/dosdevices/y:"
+fi
+if [ -d "$HOME" ] ; then
+    [ -d "$WINEPREFIX/dosdevices/y:" ] || ln -s "$HOME" "$WINEPREFIX/dosdevices/y:"
+fi
+
+# hide error/stdout message
+if test "z$WINEDEBUG" = z ; then
+    exec >/tmp/navicat.output 2>&1
+fi
+
+# install inf
+for infcmd in wine.inf/DefaultInstall ; do
+    inffile=`echo $infcmd | cut -d '/' -f 1`
+    inftype=`echo $infcmd | cut -d '/' -f 2`
+
+    runreg=0
+    if [ -f "$WINEPREFIX/drive_c/windows/inf.done/$inffile" ] ; then
+        diff -q "$WINEPREFIX/drive_c/windows/inf/$inffile" "$WINEPREFIX/drive_c/windows/inf.done/$inffile"  >/dev/null 2>&1
+        if [ $? -ne 0 ] ; then
+            runreg=1
+        fi
+    else
+        runreg=1
+    fi
+
+    if [ $runreg -gt 0 ] ; then
+        "${WINELOADER:-wine}" rundll32.exe setupapi.dll,InstallHinfSection $inftype 128 $inffile
+        cp "$WINEPREFIX/drive_c/windows/inf/$inffile" "$WINEPREFIX/drive_c/windows/inf.done/$inffile" 
+    fi
+done
+
+# run Navicat.exe
+exec "${WINELOADER:-wine}" "$navicat_root/Navicat/Navicat.exe" "$1" "$2" "$3" "$4" "$5" "$6" "$7"

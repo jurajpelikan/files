@@ -1,0 +1,17 @@
+#!/bin/bash
+
+directory=~/archiv/Desktop/`date +%G%m%d`
+
+if [ -d $directory  ]; then
+    echo "Directory $directory already exists"
+else
+    echo "Creating directory: $directory";
+    mkdir -p $directory
+fi
+
+if [ "$(ls -A ~/Desktop)" ]; then
+    mv ~/Desktop/*  $directory
+    echo "Backup succesfull."
+else
+    echo "Nothing to backup."
+fi

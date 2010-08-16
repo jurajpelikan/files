@@ -1,0 +1,9 @@
+#!/bin/bash
+
+BASE=${1%/}
+
+export ENV_BASE=$BASE
+
+command="dvtm 'screen -m -c /home/juraj/.screenrc.base  "$BASE"/env/bin/ipython ' 'screen -m -c /home/juraj/.screenrc.base bash --init-file "$BASE"/.bashrc'  'screen -m -c /home/juraj/.screenrc.base bash --init-file "$BASE"/.bashrc'"
+
+eval $command

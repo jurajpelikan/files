@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# xmodmap -e "keycode 110 = Home"
+# xmodmap -e "keycode 119 = End"
+# xmodmap -e "keycode 115 = Prior"
+# xmodmap -e "keycode 112 = Next"
+# xmodmap -e "keycode 117 = Delete"
+
+xmodmap -e "keycode 110 = Home"
+xmodmap -e "keycode 119 = Delete"
+xmodmap -e "keycode 115 = End"
+xmodmap -e "keycode 112 = Prior"
+xmodmap -e "keycode 117 = Next"
+xmodmap -e "keycode 118 = Insert"
+xmodmap -e "keycode 107 = Print"
+xmodmap -e "keycode 96  = F12"
+xmodmap -e "keycode 86  = F11"

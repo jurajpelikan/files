@@ -1,0 +1,13 @@
+# read in your normal screenrc
+# before anything else
+sessionname 'start'
+source $HOME/.screenrc
+screen -t root sudo bash 
+chdir $HOME/Downloads
+screen -t downloads
+chdir $HOME/Documents
+screen -t documents
+chdir $HOME/Videos
+screen -t videos
+chdir $HOME/
+screen -t applications 
