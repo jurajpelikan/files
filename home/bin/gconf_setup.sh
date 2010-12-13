@@ -9,7 +9,6 @@ gconftool-2 --set /apps/compiz/general/allscreens/options/maximize_window_key --
 gconftool-2 --set /apps/compiz/general/allscreens/options/unmaximize_window_key --type string ""
 gconftool-2 --set /apps/metacity/window_keybindings/toggle_fullscreen --type string "F11"
 gconftool-2 --set /apps/metacity/window_keybindings/toggle_maximized --type string "<Control><Alt>f"
-gconftool-2 --set /apps/metacity/window_keybindings/toggle_above --type string "<Super>t"
 gconftool-2 --set --type string "/apps/compiz/plugins/extrawm/allscreens/options/toggle_always_on_top_key" --type string "<Super>t"
 gconftool-2 --set /apps/metacity/window_keybindings/toggle_on_all_workspaces --type string "<Super>r"
 gconftool-2 --set --type string "/apps/compiz/plugins/extrawm/allscreens/options/toggle_sticky_key" --type string "<Super>r"
@@ -29,6 +28,16 @@ gconftool-2 --set /apps/gnome-do/preferences/Do/CorePreferences/Theme --type str
 gconftool-2 --set /apps/nautilus/preferences/default_folder_viewer --type string "list_view"
 gconftool-2 --set /apps/nautilus/preferences/start_with_toolbar --type bool 0w
 gconftool-2 --set /apps/metacity/general/focus_mode --type string "sloppy" 
+gconftool-2 --set /apps/metacity/keybinding_commands/command_1  --type string "rhythmbox-client --no-start --play-pause"
 gconftool-2 --set /apps/metacity/global_keybindings/run_command_1 --type string "<Super>x"
-gconftool-2 --set /apps/metacity/keybinding_commands/command_1  --type string "xmms2 toggleplay"
+gconftool-2 --set /apps/metacity/keybinding_commands/command_2  --type string "$HOME/bin/switch_screen.py --screen=left"
+gconftool-2 --set /apps/metacity/global_keybindings/run_command_2 --type string "<Super>Left"
+gconftool-2 --set /apps/metacity/keybinding_commands/command_3  --type string "$HOME/bin/switch_screen.py --screen=right"
+gconftool-2 --set /apps/metacity/global_keybindings/run_command_3 --type string "<Super>Right"
 gconftool-2 --set /apps/metacity/general/button_layout --type string "menu:minimize,maximize,close"
+
+gconftool-2 --set /apps/metacity/keybinding_commands/command_4  --type string "wmctrl -r :ACTIVE: -b toggle,above"
+gconftool-2 --set /apps/metacity/global_keybindings/run_command_4 --type string "<Super>t"
+
+gconftool-2 --set /apps/metacity/keybinding_commands/command_5  --type string "wmctrl -r :ACTIVE: -b toggle,sticky"
+gconftool-2 --set /apps/metacity/global_keybindings/run_command_5 --type string "<Super>r"
