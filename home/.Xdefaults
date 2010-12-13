@@ -1,4 +1,4 @@
-urxvt.font: xft:Bitstream Vera Sans Mono-8
+urxvt.font: xft:Dejavu Sans Mono-9.5
 urxvt.saveLines: 5000
 urxvt.foreground: white
 urxvt.title: Terminal
